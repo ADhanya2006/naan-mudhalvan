@@ -63,16 +63,29 @@ if uploaded_file:
     col2.metric("R² Score", f"{r2:.2f}")
     col3.metric("Total Anomalies Detected", df['Anomaly'].value_counts().get('Anomaly', 0))
 
-    # Plot: Energy Usage with Anomalies
-    st.subheader("📈 Energy Usage Over Time with Anomalies")
-    fig, ax = plt.subplots(figsize=(12, 5))
-    ax.plot(df['Date'], df['Energy_Usage_kWh'], label='Energy Usage (kWh)', color='blue')
-    anomalies = df[df['Anomaly'] == "Anomaly"]
-    ax.scatter(anomalies['Date'], anomalies['Energy_Usage_kWh'], color='red', label='Anomalies')
-    ax.set_xlabel("Date")
-    ax.set_ylabel("Energy Usage (kWh)")
-    ax.legend()
-    st.pyplot(fig)
+  # Plot: Energy Usage with Anomalies
+st.subheader("📈 Energy Usage Over Time with Anomalies")
+fig, ax = plt.subplots(figsize=(14, 6), dpi=100)  # Increased DPI for clarity
+
+# Plot energy usage line
+ax.plot(df['Date'], df['Energy_Usage_kWh'], label='Energy Usage (kWh)', color='blue', linewidth=2)
+
+# Highlight anomalies
+anomalies = df[df['Anomaly'] == "Anomaly"]
+ax.scatter(anomalies['Date'], anomalies['Energy_Usage_kWh'], color='red', label='Anomalies', s=50, marker='x')
+
+# Labels and legend
+ax.set_title("Daily Energy Usage with Detected Anomalies", fontsize=16)
+ax.set_xlabel("Date", fontsize=12)
+ax.set_ylabel("Energy Usage (kWh)", fontsize=12)
+ax.legend(fontsize=12)
+ax.grid(True, linestyle='--', alpha=0.5)
+
+# Rotate x-axis labels for better readability
+plt.xticks(rotation=45)
+
+# Show plot in Streamlit
+st.pyplot(fig)
 
     # Annotated Data Table
     st.subheader("🧾 Annotated Energy Data")
